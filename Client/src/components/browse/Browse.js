@@ -1,32 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { getTips } from '../../actions/tipActions';
+import { getTags } from '../../actions/tagActions';
+import PropTypes from 'prop-types';
 import Card from './Card';
 
-import axios from 'axios';
-
-const Browse = () => {
-  const [tips, setTips] = useState([]);
-
-  const getData = async () => {
-    const { data } = await axios('/tips');
-    setTips([...data]);
-  };
-
+const Browse = props => {
+  const { getTips, getTags, tips, tags } = props;
   useEffect(() => {
-    const callServer = async () => {
-      await getData();
-    };
-
-    callServer();
+    getTips();
+    getTags();
+    console.log(tags);
   }, []);
 
   return (
     <div className='Browse'>
       Browse tips
       {tips.map(x => {
-        return <Card key={x._id} title={x.title} desc={x.desc} link={x.link} id={x.id} />;
+        return (
+          <Card key={x._id} title={x.title} desc={x.desc} link={x.link} id={x._id} tags={x.tags} />
+        );
       })}
     </div>
   );
 };
 
-export default Browse;
+Browse.propTypes = {
+  tips: PropTypes.array.isRequired,
+  getTips: PropTypes.func.isRequired,
+  getTags: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  tips: state.tips,
+  tags: state.tags,
+});
+
+export default connect(
+  mapStateToProps,
+  { getTips, getTags }
+)(Browse);

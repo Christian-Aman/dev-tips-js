@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
+// import axios from 'axios';
 import { connect } from 'react-redux';
 import { addTip } from '../../actions/tipActions';
 import PropTypes from 'prop-types';
@@ -19,12 +20,23 @@ const useStyles = makeStyles(theme => ({
 const SubmitTip = props => {
   console.log(props);
   const { title, desc, link } = props.props;
-  const history = useHistory();
+  // const history = useHistory();
 
-  const submit = async () => {
+  const submit = () => {
     console.log(title, desc, link);
-    await props.addTip({ title, desc, link });
-    history.push('/');
+    props.addTip({ title, desc, link });
+    // axios
+    //   .post('/tips', {
+    //     title,
+    //     desc,
+    //     link,
+    //   })
+    //   .then(function() {
+    //     history.push('/');
+    //   })
+    //   .catch(function(error) {
+    //     console.log(error);
+    //   });
   };
 
   const classes = useStyles();
